@@ -1,0 +1,44 @@
+name: replace 0.0.0.0 with 127.0.0.1
+
+on: 
+  release:
+    types: [published]
+  push:
+    tags:
+    - 'v*'
+#    branches: 
+#      - master
+  schedule:
+    # - cron: "0 0/6 * * *"
+    - cron: "0 0 * * 0/4"
+  watch:
+    types: [started]
+   
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install requests
+      run: |
+        pip install requests
+    - name: Do the do
+      run: | 
+        echo `date +"%Y-%m-%d %H:%M:%S"` begin > time.log
+        python main.py   
+    - name: Commit
+      run: |
+        git config --global user.email "57046712+not-lucky@users.noreply.github.com"
+        git config --global user.name "not-lucky"
+        git add .
+        git commit -m "Update new blocklist" -a
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.HMMMM_GITHUB_TOKEN }}

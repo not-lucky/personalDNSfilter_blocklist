@@ -32,22 +32,14 @@ jobs:
       run: | 
         echo `date +"%Y-%m-%d %H:%M:%S"` begin > time.log
         python main.py   
-    -name: download rclone.conf
+    - name: download rclone.conf
       run: |
         curl -L ${{ secrets.HMMMM_RCLONE_CONF_DOWNLOAD_URL}} > ./rclone.conf
     - uses: actions/checkout@master
     - name: rclone
       uses: wei/rclone@v1
       with:
-        args: --config=./rclone.conf copy ./oisd_hosts_full.txt dropbox: -vv > ./rclone.log
-    - name: Commit
+        args: --config=./rclone.conf copy ./ dropbox: -vv > ./rclone.log
+    -name: delete rclone.conf
       run: |
         rm -f ./rclone.conf
-        git config --global user.email "57046712+not-lucky@users.noreply.github.com"
-        git config --global user.name "not-lucky"
-        git add .
-        git commit -m "Update new blocklist" -a
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.HMMMM_GITHUB_TOKEN }}

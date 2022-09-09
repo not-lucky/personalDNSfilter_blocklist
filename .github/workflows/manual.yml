@@ -10,7 +10,7 @@ on:
 #      - master
   schedule:
     # - cron: "0 0/6 * * *"
-    - cron: "0 0 * * 0/4"
+    - cron: "0 0/1 * * *"
   watch:
     types: [started]
    
@@ -40,6 +40,6 @@ jobs:
       uses: wei/rclone@v1
       with:
         args: --config=./rclone.conf copy ./ dropbox: -vv > ./rclone.log
-    -name: delete rclone.conf
+    - name: delete rclone.conf
       run: |
         rm -f ./rclone.conf

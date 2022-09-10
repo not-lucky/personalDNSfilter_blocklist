@@ -27,12 +27,14 @@ jobs:
         python main.py   
     - name: download rclone.conf
       run: |
-        curl -L ${{ secrets.HMMMM_RCLONE_CONF_DOWNLOAD_URL}} > ./rclone.conf
-    - uses: actions/checkout@master
-    - name: rclone
-      uses: wei/rclone@v1
-      with:
-        args: --config=./rclone.conf copy ./ dropbox:personalDNSfilter_blocklist -vv > ./rclone.log
+        curl -L ${{ secrets.HMMMM_RCLONE_CONF_DOWNLOAD_URL}} > ~/.config/rclone/rclone.conf
+    - name: install rclone
+      run: |
+        curl https://rclone.org/install.sh | sudo bash
+    - name: upload
+      run: |
+        rclone copy ./ dropbox:personalDNSfilter_blocklist -vv > ./rclone.log
+        rclone copy ./rclone.log dropbox:personalDNSfilter_blocklist
     - name: delete rclone.conf
       run: |
         rm -f ./rclone.conf

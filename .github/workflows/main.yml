@@ -1,13 +1,6 @@
 name: replace 0.0.0.0 with 127.0.0.1
 
 on: 
-  release:
-    types: [published]
-  push:
-    tags:
-    - 'v*'
-#    branches: 
-#      - master
   schedule:
     # - cron: "0 0/6 * * *"
     - cron: "0/30 0/1 * * *"
